@@ -1,0 +1,160 @@
+
+<!-- saved from url=(0041)http://hmdlohar.uk.nf/thecolor/game1.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<style type="text/css">
+			body{
+				//width:500px;
+				text-align: center;
+			}
+			.rotate-half{
+				transform: rotateY(90deg);
+
+			}
+			.anim1{
+				transition: all 0.1s;
+			}
+			.kodi-margin{
+				height:120px;
+			}
+			.kodi-container{
+				-height:100px;
+				width:100px;
+				border:1px solid gold;
+				margin: auto;
+				text-align: center;
+			}
+			.kodi-container img{
+				height:50px;
+				
+			}
+		</style>
+		<title>Game1</title>
+		<script src="./game1_files/color-tool-api.js.download"></script>
+		<script src="./game1_files/jquery.min.js.download"></script>
+		<script src="./game1_files/snap.svg-min.js.download"></script>
+		<script src="./game1_files/kodiGame.js.download"></script>
+		<meta name="viewport" content="width=device-width user-scalable=0"> 
+	</head>
+	<body>
+		<div class="kodi-margin" id="km1">
+			<div class="kodi-container" id="kc" ontouchstart="kodi.throwKodi(event)">
+				<img src="./game1_files/kodifalse.png" id="kt1" class="anim1">
+				<img src="./game1_files/kodifalse.png" id="kt2" class="anim1">
+				<img src="./game1_files/kodifalse.png" id="kt3" class="anim1">
+				<img src="./game1_files/kodifalse.png" id="kt4" class="anim1">
+			</div>
+		</div>
+		<svg id="mainSvg">
+			<defs>
+				<marker id="markerArrow" markerWidth="3" markerHeight="3" refX="1" refY="1.5" orient="auto">
+			        <path d="M0.5,0.5 L0.5,2.5 L2.5,1.5 L0.5,0.5" style="stroke:none;"></path>
+			    </marker>
+			    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+			      <feoffset result="offOut" in="SourceGraphic" dx="0" dy="0"></feoffset>
+			      <fegaussianblur result="blurOut" in="offOut" stdDeviation="10"></fegaussianblur>
+			      <feblend in="SourceGraphic" in2="blurOut" mode="normal"></feblend>
+			    </filter>
+
+			</defs>
+		</svg>
+		<br>
+		<div class="kodi-margin" id="km2">
+			
+		</div>
+		
+		<br>
+		<fieldset id="playersSelection">
+			<input type="checkbox" checked="" name="colors" value="red">R
+			<input type="checkbox" name="colors" value="green">G
+			<input type="checkbox" checked="" name="colors" value="blue">B
+			<input type="checkbox" name="colors" value="yellow">Y
+		</fieldset>
+		<input type="number" disabled="" value="3" id="numNow" style="font-size: 20px;width:200px;" onclick="kodi.throwKodi()">
+		<br>
+		<br>
+		<input type="button" value="Start Game" name="" onclick="startGame();hideOthers(this);">
+	
+
+
+<script type="text/javascript">
+var mainSvg=$("#mainSvg");
+var numNow=$("#numNow");
+var colorArr=[];
+
+function startGame(){
+	var cb=document.getElementsByName("colors");
+	for(c of cb){
+		if(c.checked){
+			console.log(c.value);
+			colorArr.push(c.value);
+		}
+	}
+	window.kodi=new kodiGame(mainSvg[0],numNow[0],kc,colorArr);
+	kodi.setOnThrow(function(num,arr){
+		kc.style.pointerEvents="none";
+		rotateAllKodi(arr);
+	});
+	kodi.setOnTrhowReady(function(color){
+		//console.log("allow",color);
+		kc.style.pointerEvents="auto";
+		kc.style.backgroundColor=color;
+
+		if(color=="red"||color=="green"){
+			km1.appendChild(kc);
+		}
+		else if(color=="blue"||color=="yellow"){
+			km2.appendChild(kc);
+		}
+	});
+	kodi.startGame();
+
+}
+
+
+function startKodiRotate(kd,times=5,finalVal=true){
+	var kdVal=true;
+	var deg=90;
+	var kr;
+	kr=setInterval(function(){
+		kd.src="kodiImage/kodi"+kdVal+".png";
+		kd.style.transform="rotateY("+deg+"deg)";
+		kdVal=!kdVal;
+		deg+=90;
+		if(times >0){
+			times--;
+		}
+		else{
+			clearInterval(kr);
+			kd.src="kodiImage/kodi"+finalVal+".png";
+			kd.style.transform="rotateY(0deg)";
+		}
+	},70);
+}
+
+function rotateAllKodi(finalAll=[true,false,true,false]){
+
+	var kds=$("#kc").children();
+	for(var i=0;i<kds.length;i++){
+		var times=Math.floor(Math.random()*8)+3;
+		startKodiRotate(kds[i],times,finalAll[i])
+	}
+}
+function hideOthers(e){
+	$(e).hide();
+	$(playersSelection).hide();
+	$(numNow).hide();
+}
+function triggerDownload (imgURI,name) {
+    var evt = new MouseEvent('click', {
+        view: window,
+        bubbles: false,
+        cancelable: true
+    });
+
+    var a = document.createElement('a');
+    a.setAttribute('download', name+'.png');
+    a.setAttribute('href', imgURI);
+    a.setAttribute('target', '_blank');
+    a.dispatchEvent(evt);
+}
+</script></body></html>
