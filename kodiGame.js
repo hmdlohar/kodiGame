@@ -80,7 +80,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 	}
 
 
-
+	// p is color name
 	for(p in paths){
 		if(homeWords.indexOf(p)<0){
 			continue;

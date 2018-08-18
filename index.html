@@ -1,10 +1,16 @@
 
-<!-- saved from url=(0041)http://hmdlohar.uk.nf/thecolor/game1.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<html>
+	<head>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 		<style type="text/css">
 			body{
 				//width:500px;
 				text-align: center;
+			}
+			.top-container{
+				height:700px;
+				width:450px;
+				background: white;
 			}
 			.rotate-half{
 				transform: rotateY(90deg);
@@ -29,57 +35,71 @@
 			}
 		</style>
 		<title>Game1</title>
-		<script src="./game1_files/color-tool-api.js.download"></script>
-		<script src="./game1_files/jquery.min.js.download"></script>
-		<script src="./game1_files/snap.svg-min.js.download"></script>
-		<script src="./game1_files/kodiGame.js.download"></script>
+		
+		<script src="jquery.min.js"></script>
+		<script src="snap.svg-min.js"></script>
+		<script src="kodiGame.js"></script>
 		<meta name="viewport" content="width=device-width user-scalable=0"> 
 	</head>
 	<body>
-		<div class="kodi-margin" id="km1">
-			<div class="kodi-container" id="kc" ontouchstart="kodi.throwKodi(event)">
-				<img src="./game1_files/kodifalse.png" id="kt1" class="anim1">
-				<img src="./game1_files/kodifalse.png" id="kt2" class="anim1">
-				<img src="./game1_files/kodifalse.png" id="kt3" class="anim1">
-				<img src="./game1_files/kodifalse.png" id="kt4" class="anim1">
+			<div class="container top-container">
+				<div class="row">
+					
+					<div class="col">
+						<div class="kodi-margin" id="km1">
+							<div class="kodi-container" id="kc" ontouchstart="kodi.throwKodi(event)">
+								<img src="kodiImage/kodifalse.png" id="kt1" class="anim1">
+								<img src="kodiImage/kodifalse.png" id="kt2" class="anim1">
+								<img src="kodiImage/kodifalse.png" id="kt3" class="anim1">
+								<img src="kodiImage/kodifalse.png" id="kt4" class="anim1">
+							</div>
+						</div>
+						<svg id="mainSvg" >
+							<defs>
+								<marker id="markerArrow" markerWidth="3" markerHeight="3" refX="1" refY="1.5" orient="auto">
+							        <path d="M0.5,0.5 L0.5,2.5 L2.5,1.5 L0.5,0.5" style="stroke:none;" />
+							    </marker>
+							    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+							      <feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+							      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+							      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+							    </filter>
+
+							</defs>
+						</svg>
+						<br>
+						<div class="kodi-margin" id="km2">
+							
+						</div>
+						
+						<br>
+						<fieldset id="playersSelection">
+							<input type="checkbox" checked="" name="colors" value="red">R
+							<input type="checkbox" name="colors" value="green">G
+							<input type="checkbox" checked="" name="colors" value="blue">B
+							<input type="checkbox" name="colors" value="yellow">Y
+						</fieldset>
+						<input type="number" disabled="" value="3" id="numNow" style="font-size: 20px;width:200px;" onclick="kodi.throwKodi()">
+						<br>
+						<br>
+						<input type="button" value="Start Game" name="" onclick="startGame();hideOthers(this);">
+					</div>
+					
+				</div>
 			</div>
-		</div>
-		<svg id="mainSvg">
-			<defs>
-				<marker id="markerArrow" markerWidth="3" markerHeight="3" refX="1" refY="1.5" orient="auto">
-			        <path d="M0.5,0.5 L0.5,2.5 L2.5,1.5 L0.5,0.5" style="stroke:none;"></path>
-			    </marker>
-			    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-			      <feoffset result="offOut" in="SourceGraphic" dx="0" dy="0"></feoffset>
-			      <fegaussianblur result="blurOut" in="offOut" stdDeviation="10"></fegaussianblur>
-			      <feblend in="SourceGraphic" in2="blurOut" mode="normal"></feblend>
-			    </filter>
-
-			</defs>
-		</svg>
-		<br>
-		<div class="kodi-margin" id="km2">
-			
-		</div>
-		
-		<br>
-		<fieldset id="playersSelection">
-			<input type="checkbox" checked="" name="colors" value="red">R
-			<input type="checkbox" name="colors" value="green">G
-			<input type="checkbox" checked="" name="colors" value="blue">B
-			<input type="checkbox" name="colors" value="yellow">Y
-		</fieldset>
-		<input type="number" disabled="" value="3" id="numNow" style="font-size: 20px;width:200px;" onclick="kodi.throwKodi()">
-		<br>
-		<br>
-		<input type="button" value="Start Game" name="" onclick="startGame();hideOthers(this);">
-	
-
+	</body>
+</html>
 
 <script type="text/javascript">
 var mainSvg=$("#mainSvg");
 var numNow=$("#numNow");
 var colorArr=[];
+
+window.onload=function(){
+	bh=document.body.clientHeight;
+	bw=document.body.clientWidth;
+
+}
 
 function startGame(){
 	var cb=document.getElementsByName("colors");
@@ -109,6 +129,7 @@ function startGame(){
 	kodi.startGame();
 
 }
+
 
 
 function startKodiRotate(kd,times=5,finalVal=true){
@@ -157,4 +178,4 @@ function triggerDownload (imgURI,name) {
     a.setAttribute('target', '_blank');
     a.dispatchEvent(evt);
 }
-</script></body></html>
+</script>
