@@ -98,6 +98,17 @@ var colorArr=[];
 window.onload=function(){
 	bh=document.body.clientHeight;
 	bw=document.body.clientWidth;
+	if(bh >= bw * 1.60){
+		console.log("case1");
+		$(".top-container").height(bw * 1.60);
+		$(".top-container").width(bw -50);
+	}
+	else{
+		console.log("case2");
+		$(".top-container").height(bh-50);
+		$(".top-container").width(bh * .60);
+	}
+	
 
 }
 
