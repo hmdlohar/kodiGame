@@ -4,6 +4,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 	var currentMove=0;
 	var doubleMove=false;
 	var noAnalyze=false;
+	var killFlag=false;
 	var onTrhow=function(){console.log("onTrhow is not set");}
 	var onTrhowReady=function(){console.log("onTrhowReady is not set");}
 	s.attr({
@@ -184,7 +185,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 		var arRand=arrRand();
 		var rand=arRand.rand;
 		onTrhow(rand,arRand.arr);
-		console.log(rand,arRand.arr);
+		//console.log(rand,arRand.arr);
 		numNow.value=rand;
 		if(rand==4 || rand==8){
 			console.log("dbl");
@@ -246,7 +247,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 			if(!manual){
 				if(!doubleMove){
 					nextMove();
-					console.log("called");
+					console.log("turn change");
 					//console.log("manual",manual);
 				}
 				else if(!manual){
@@ -267,6 +268,14 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 			f++;
 		}
 		var speed=manual?50:200;
+		
+		if(!manual){
+			playAudio("move");
+		}
+		else{
+			playAudio("kill");
+		}
+
 		circle.animate({cx:allPoints[paths[color][f]].x,cy:allPoints[paths[color][f]].y},speed,null,function(){
 				circle.attr("data-current-pos",f);
 				moveCircleCore(circle,color,f,t,manual);
@@ -432,311 +441,3 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","
 
 
 
-/*
-var s=Snap("#mainSvg");
-var numNow=$("#numNow")[0];
-var currentMove=0;
-var doubleMove=false;
-var noAnalyze=false;
-s.attr({
-	stroke: "#101010",
-	strokeWidth:2,
-	height:500,
-	width:500,
-	padding:"5px",
-	viewBox: "0,0,1000,1000"
-});
-var lineAttr={stroke:"#101010",strokeWidth:2,fill:"red"};
-var pathAttr={stroke:"#101010",strokeWidth:15,fill:"none",opacity:0.3};
-// s.line(0,0,1000,0).attr(lineAttr);
-// s.line(0,0,0,1000).attr(lineAttr);
-// s.line(1000,1000,1000,0).attr(lineAttr);
-// s.line(1000,1000,0,1000).attr(lineAttr);
-var allPoints=[];
-for(i=0;i<=1005;i+=200){
-	s.line(i,0,i,1000).attr(lineAttr);
-	s.line(0,i,1000,i).attr(lineAttr);
-}
-for(i=100;i<=900;i+=200){
-	for(j=100;j<=900;j+=200){
-		allPoints.push({"x": i,"y": j});
-	}
-}
-for(i in allPoints){
-	//s.text(allPoints[i].x,allPoints[i].y,i);
-}
-var paths={
-	"red":[10,15,20,21,22,23,24,19,14,9,4,3,2,1,0,5,6,7,8,13,18,17,16,11,12],
-	"green":[22,23,24,19,14,9,4,3,2,1,0,5,10,15,20,21,16,11,6,7,8,13,18,17,12],
-	"blue":[14,9,4,3,2,1,0,5,10,15,20,21,22,23,24,19,18,17,16,11,6,7,8,13,12],
-	"yellow": [2,1,0,5,10,15,20,21,22,23,24,19,14,9,4,3,8,13,18,17,16,11,6,7,12]
-};
-var homes={"red":10,"green":22,"blue":14,"yellow":2};
-var homeWords=["red","green","blue"];
-var rectWords=["red","green","blue","yellow","white"];
-var homes1=[10,22,14,2,12];
-var homes3=[10,22,14,2];
-var players=homeWords.length;
-var kodiNums=[1,2,3,4,8,1,2,3,4,8,1,2,3,4,8,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,1,2,1,2,3,4,8];
-var circles=[];
-var ai=0;
-for(h of homes1){
-	//console.log(h);
-	s.line(allPoints[h].x-100,allPoints[h].y-100,allPoints[h].x+100,allPoints[h].y+100).attr(lineAttr);
-	s.line(allPoints[h].x+100,allPoints[h].y-100,allPoints[h].x-100,allPoints[h].y+100).attr(lineAttr);
-	s.rect(allPoints[h].x-100,allPoints[h].y-100,200,200).attr({"fill":rectWords[ai],"opacity":0.2});
-	if(ai <4){
-		var ar=paths[rectWords[ai]];
-		//console.log(allPoints[ar[13]]);
-		var x=allPoints[ar[13]].x;
-		var y=allPoints[ar[13]].y;
-		var pathStr="M"+x+" "+y;
-		for(var j=13;j<17;j++){
-			x=allPoints[ar[j]].x;
-			y=allPoints[ar[j]].y;
-			pathStr+=" "+x+" "+y;
-			//s.circle(,,3).attr("fill","pink");
-
-		}
-		var path=s.path(pathStr).attr(pathAttr).attr("stroke",rectWords[ai]);
-		path.node.style.markerEnd="url(#markerArrow)";
-	}
-	ai++;
-}
-
-//var circle1=s.circle(allPoints[paths.red[0]].x,allPoints[paths.red[0]].y,30).attr("fill","red");
-
-for(p in paths){
-	for(i=0;i<=3;i++){
-		var c=s.circle(allPoints[paths[p][0]].x,allPoints[paths[p][0]].y,50).attr({"fill":p,"stroke":"none","data-current-pos":0,"data-color":p,"display":"none"});
-		//paths[p].push(c);
-		circles.push(c);
-	}
-}
-analyzeHomes();
-allowMove();
-
-function startGame(){
-	for(h of homeWords){
-		for(c of circles){
-			if(c.attr("data-color")==h){
-				c.attr("display","block");
-			}
-		}
-	}
-	numNow.disabled=false;
-}
-
-function allowMove(){
-	var color=homeWords[currentMove%players];
-	numNow.style.backgroundColor=color;
-}
-function currentColorPoss(){
-	var color=homeWords[currentMove%players];
-	var arr=[];
-	for(c of circles){
-		if(c.attr("data-color")==color){
-			var pos=getCurrentPoint(c);
-			if(!isHome(pos)){
-				arr.push(c.attr("data-current-pos"));
-			}
-		}
-	}
-	return arr;
-}
-function findRand(){
-	var rand=Math.floor(Math.random()*kodiNums.length);
-	//var poss=currentColorPoss();
-	
-	return rand;
-}
-function changeNumNow(){
-	var rand=findRand();
-	numNow.value=kodiNums[rand];
-	if(kodiNums[rand]==4 || kodiNums[rand]==8){
-		console.log("dbl");
-		doubleMove=true;
-	}
-	var color=homeWords[currentMove%players];
-	for(c of circles){
-		if(c.attr("data-color")==color){
-			addClickListner(c);
-
-		}
-	}
-}
-function nextMove(){
-	currentMove++;
-	allowMove();
-}
-function moveByValue(e){
-	var val=parseInt(numNow.value);
-	moveCircle(Snap(e),val);
-}
-function moveCircle(circle,t){
-	var f=parseInt(circle.attr("data-current-pos"));
-	t=f+t;
-	var color=circle.attr("data-color");
-	//console.log(circle,color,f,t);
-	moveCircleCore(circle,color,f,t);
-}
-function killCircle(circle){
-	var f=parseInt(circle.attr("data-current-pos"));
-	var color=circle.attr("data-color");
-	moveCircleCore(circle,color,f,0,true);
-}
-function moveCircleCore(circle,color,f,t,manual=false){
-	//console.log("manual",manual);
-	if(t==f){
-		analyzeHomes(manual);
-		for(c of circles){
-		if(c.attr("data-color")==color){
-				removeClickListner(c);
-			}
-		}
-		if(!manual){
-			if(!doubleMove){
-				nextMove();
-				console.log("called");
-				//console.log("manual",manual);
-			}
-			else if(!manual){
-				doubleMove=false;
-			}
-		}
-		return;
-	}
-	if(t < f){
-		f--;
-	}
-	else{
-		f++;
-	}
-	var speed=manual?50:200;
-	circle.animate({cx:allPoints[paths[color][f]].x,cy:allPoints[paths[color][f]].y},speed,null,function(){
-			circle.attr("data-current-pos",f);
-			moveCircleCore(circle,color,f,t,manual);
-	});
-}
-function getCurrentPoint(circle){
-	var color=circle.attr("data-color");
-	var pos=circle.attr("data-current-pos");
-	return paths[color][pos];
-}
-function addClickListner(circle){
-	circle.attr({"stroke":"black","strokeWidth":"3","r":"35","onclick":"moveByValue(this)"});
-}
-function removeClickListner(circle){
-	circle.attr({"stroke":"none","strokeWidth":"2","onclick":"null"});
-}
-
-
-
-function PointOutPath(color){
-	for(i in color){
-		s.text(allPoints[color[i]].x,allPoints[color[i]].y,i);
-	}
-}
-
-function adjustHomes(point,cs){
-	if(cs.length <=1){
-		return;
-	}
-	if(cs.length >4){
-		console.log("its fore");
-		var p=allPoints[point];
-		var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y},{x: p.x+60,y: p.y+60},{x: p.x+60,y: p.y-60},{x: p.x-60,y: p.y-60},{x: p.x-60,y: p.y+60}];
-		for(x of points){
-		var c=cs.pop();
-		if(c){
-				c.animate({cx:x.x,cy:x.y,r:30},200);
-				//console.log({cx:x.x,cy:x.y,r:20},500);
-			}
-		}
-		return;
-	}
-	var p=allPoints[point];
-	var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y}];
-	
-	for(x of points){
-		var c=cs.pop();
-		if(c){
-			c.animate({cx:x.x,cy:x.y,r:30},200);
-			//console.log({cx:x.x,cy:x.y,r:20},500);
-		}
-	}
-}
-function adjustOthers(point,cs){
-	if(cs.length<=1){
-		return;
-	}
-	var cColor="";
-	var killFlag=false;
-	for(c of cs){
-		var dColor=c.attr("data-color");
-		if(cColor==""){
-			cColor=dColor;
-		}
-		if(cColor != dColor){
-			killFlag=true;
-		}
-	}
-	var color=homeWords[currentMove%players];
-	for(c of cs){
-		if(c.attr("data-color")!=color && cs.length > 1){
-			//console.log("kill",c);
-			if(killFlag){
-				doubleMove=true;
-				killCircle(c);
-				
-				//noAnalyze=true;
-				return;
-			}
-			
-		}
-	}
-
-	var p=allPoints[point];
-	var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y}];
-	
-	for(x of points){
-		var c=cs.pop();
-		if(c){
-			c.animate({cx:x.x,cy:x.y,r:30},200);
-			//console.log({cx:x.x,cy:x.y,r:20},500);
-		}
-	}
-}
-function isHome(num){
-	for(h of homes3){
-		if(h==num){
-			return true;
-		}
-	}
-	return false;
-}
-function analyzeHomes(noOthers=false) {
-	arr=[];
-	for(c of circles){
-		if(arr[getCurrentPoint(c)+"n"]!=undefined){
-			arr[getCurrentPoint(c)+"n"].push(c);
-		}
-		else{
-			arr[getCurrentPoint(c)+"n"]=[c];
-		}
-	}
-	for(a in arr){
-		var point=parseInt(a);
-		var flag=false;
-		if(isHome(point)){
-			adjustHomes(h,arr[a]);
-		}
-		else if(!noOthers){	
-			console.log(point,"its pont",arr[a]);
-			adjustOthers(point,arr[a]);
-		}
-	}
-}
-
-
-*/

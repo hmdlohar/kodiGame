@@ -87,6 +87,8 @@
 					
 				</div>
 			</div>
+			<audio src="sounds/oneMove0.mp3" id="oneMoveSound"></audio>
+			<audio src="sounds/killMove0.mp3" id="killMoveSound"></audio>
 	</body>
 </html>
 
@@ -95,18 +97,29 @@ var mainSvg=$("#mainSvg");
 var numNow=$("#numNow");
 var colorArr=[];
 
+function playAudio(type){
+	if(type=="move"){
+		oneMoveSound.cloneNode().play();
+	}
+	else if(type="kill"){
+		killMoveSound.cloneNode().play();
+	}
+	
+}
+
 window.onload=function(){
 	bh=document.body.clientHeight;
 	bw=document.body.clientWidth;
 	if(bh >= bw * 1.60){
 		console.log("case1");
-		$(".top-container").height(bw * 1.60);
+		$(".top-container").height(bw * 1.80);
 		$(".top-container").width(bw -50);
 	}
 	else{
 		console.log("case2");
+		
 		$(".top-container").height(bh-50);
-		$(".top-container").width(bh * .60);
+		$(".top-container").width(bh * .50);
 	}
 	
 
