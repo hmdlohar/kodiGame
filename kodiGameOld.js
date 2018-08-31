@@ -1,7 +1,4 @@
-function kodiGame(currSvg,numNow,kodiContainer,homeWords){
-    if(homeWords==undefined){
-        homeWords=["red","green","blue","yellow"];
-    }
+function kodiGame(currSvg,numNow,kodiContainer,homeWords=["red","green","blue","yellow"]){
 	var s=Snap(currSvg);
 	//var numNow=$("#numNow")[0];
 	var currentMove=0;
@@ -28,7 +25,9 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 			allPoints.push({"x": i,"y": j});
 		}
 	}
-	
+	for(i in allPoints){
+		//s.text(allPoints[i].x,allPoints[i].y,i);
+	}
 	var paths={
 		"red":[10,15,20,21,22,23,24,19,14,9,4,3,2,1,0,5,6,7,8,13,18,17,16,11,12],
 		"green":[22,23,24,19,14,9,4,3,2,1,0,5,10,15,20,21,16,11,6,7,8,13,18,17,12],
@@ -56,8 +55,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		"red":[{x: mainXY.x,y:mainXY.y-33},{x: mainXY.x,y:mainXY.y-75},{x: mainXY.x-40,y:mainXY.y-75},{x: mainXY.x+40,y:mainXY.y-75}]
 	};
 	var ai=0;
-	for(var i in homes1){
-	    var h=homes1[i];
+	for(h of homes1){
 		//console.log(h);
 		s.line(allPoints[h].x-100,allPoints[h].y-100,allPoints[h].x+100,allPoints[h].y+100).attr(lineAttr);
 		s.line(allPoints[h].x+100,allPoints[h].y-100,allPoints[h].x-100,allPoints[h].y+100).attr(lineAttr);
@@ -119,10 +117,8 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 	
 
 	kodiGame.prototype.startGame = function(){
-		for(var i in homeWords){
-		    var h=homeWords[i];
-			for(var j in circles){
-			    var c=circles[j];
+		for(h of homeWords){
+			for(c of circles){
 				if(c.attr("data-color")==h){
 					c.attr("display","block");
 				}
@@ -152,8 +148,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 	function currentColorPoss(){
 		var color=homeWords[currentMove%players];
 		var arr=[];
-		for(var j in circles){
-		    var c=circles[j];
+		for(c of circles){
 			if(c.attr("data-color")==color){
 				var pos=getCurrentPoint(c);
 				if(!isHome(pos)){
@@ -198,8 +193,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		}
 		var color=homeWords[currentMove%players];
 		var clickStatus=0;
-		for(var j in circles){
-            var c=circles[j];
+		for(c of circles){
 			if(c.attr("data-color")==color){
 				var st=addClickListner(c);
 				if(st){
@@ -208,8 +202,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 			}
 		}
 		if(clickStatus == 0){
-			for(var j in circles){
-                var c=circles[j];
+			for(c of circles){
 				if(c.attr("data-color")==color){
 					removeClickListner(c);
 				}
@@ -237,21 +230,16 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		var color=circle.attr("data-color");
 		moveCircleCore(circle,color,f,0,true);
 	}
-	function moveCircleCore(circle,color,f,t,manual){
-	    if(manual==undefined){
-	        manual=false;
-	    }
+	function moveCircleCore(circle,color,f,t,manual=false){
 		//console.log("manual",manual);
-		for(var j in circles){
-		    var c=circles[j];
+		for(c of circles){
 				if(c.attr("data-color")==color){
 					removeClickListner(c);
 				}
 			}
 		if(t==f){
 			analyzeHomes(manual);
-			for(var j in circles){
-                var c=circles[j];
+			for(c of circles){
 				if(c.attr("data-color")==color){
 					removeClickListner(c);
 				}
@@ -329,8 +317,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 			console.log("its fore");
 			var p=allPoints[point];
 			var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y},{x: p.x+60,y: p.y+60},{x: p.x+60,y: p.y-60},{x: p.x-60,y: p.y-60},{x: p.x-60,y: p.y+60}];
-			for(var k in points){
-            var x=points[k];
+			for(x of points){
 			var c=cs.pop();
 			if(c){
 					c.animate({cx:x.x,cy:x.y,r:30},200);
@@ -342,8 +329,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		var p=allPoints[point];
 		var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y}];
 		
-		for(var k in points){
-		    var x=points[k];
+		for(x of points){
 			var c=cs.pop();
 			if(c){
 				c.animate({cx:x.x,cy:x.y,r:30},200);
@@ -357,8 +343,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		}
 		var cColor="";
 		var killFlag=false;
-		for(var k in cs){
-            var c=cs[k];
+		for(c of cs){
 			var dColor=c.attr("data-color");
 			if(cColor==""){
 				cColor=dColor;
@@ -368,8 +353,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 			}
 		}
 		var color=homeWords[currentMove%players];
-		for(var k in cs){
-		    var c=cs[k];
+		for(c of cs){
 			if(c.attr("data-color")!=color && cs.length > 1){
 				//console.log("kill",c);
 				if(killFlag){
@@ -386,8 +370,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		var p=allPoints[point];
 		var points=[{x: p.x,y: p.y-60},{x: p.x,y: p.y+60},{x: p.x-60,y: p.y},{x: p.x+60,y: p.y}];
 		
-		for(var k in points){
-		    var x=points[k];
+		for(x of points){
 			var c=cs.pop();
 			if(c){
 				c.animate({cx:x.x,cy:x.y,r:30},200);
@@ -396,8 +379,7 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		}
 	}	
 	function adjustMain(point,cs){
-		for(var k in cs){
-            var c=cs[k];
+		for(c of cs){
 			if(c.attr("r") != "15"){
 				var cpt=mainPoints[c.attr("data-color")].pop();
 				c.attr({cx:cpt.x,cy:cpt.y,r:15});
@@ -409,13 +391,12 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		}
 	}
 	function isHome(num){
-		for(var k in homes3){
-		    var h=homes3[k];
+		for(h of homes3){
 			if(h==num){
 				return true;
 			}
 		}
-		return false
+		return false;
 	}
 	function isMain(num){
 		if(num == homes1[4]){
@@ -423,13 +404,9 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 		}
 		return false;
 	}
-	function analyzeHomes(noOthers) {
-	    if(noOthers==undefined){
-	        noOthers=false;
-	    }
+	function analyzeHomes(noOthers=false) {
 		arr=[];
-		for(var j in circles){
-		    var c=circles[j];
+		for(c of circles){
 			if(arr[getCurrentPoint(c)+"n"]!=undefined){
 				arr[getCurrentPoint(c)+"n"].push(c);
 			}
@@ -437,13 +414,11 @@ function kodiGame(currSvg,numNow,kodiContainer,homeWords){
 				arr[getCurrentPoint(c)+"n"]=[c];
 			}
 		}
-		//return;
 		for(a in arr){
 			var point=parseInt(a);
 			var flag=false;
 			if(isHome(point)){
-				
-				adjustHomes(point,arr[a]);
+				adjustHomes(h,arr[a]);
 			}
 			else if(!noOthers){	
 				//console.log(point,"its pont",arr[a]);

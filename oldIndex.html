@@ -117,7 +117,6 @@ function playAudio(type){
 }
 
 window.onload=function(){
-
 	bh=document.body.clientHeight;
 	bw=document.body.clientWidth;
 	if(bh >= bw * 1.60){
@@ -131,17 +130,16 @@ window.onload=function(){
 		$(".top-container").height(bh-50);
 		$(".top-container").width(bh * .50);
 	}
-
 	
 
 }
 
 function startGame(){
 	var cb=document.getElementsByName("colors");
-	for(c in cb){
-		if(cb[c].checked){
-			console.log(cb[c].value);
-			colorArr.push(cb[c].value);
+	for(c of cb){
+		if(c.checked){
+			console.log(c.value);
+			colorArr.push(c.value);
 		}
 	}
 	window.kodi=new kodiGame(mainSvg[0],numNow[0],kc,colorArr);
@@ -169,13 +167,7 @@ function startGame(){
 
 
 
-function startKodiRotate(kd,times,finalVal){
-	if(times==undefined){
-		times=5;
-	}
-	if(finalVal==undefined){
-		finalVal=true;
-	}
+function startKodiRotate(kd,times=5,finalVal=true){
 	var kdVal=true;
 	var deg=90;
 	var kr;
@@ -195,10 +187,8 @@ function startKodiRotate(kd,times,finalVal){
 	},70);
 }
 
-function rotateAllKodi(finalAll){
-	if(finalAll==undefined){
-		finalAll=[true,false,true,false];
-	}
+function rotateAllKodi(finalAll=[true,false,true,false]){
+
 	var kds=$("#kc").children();
 	for(var i=0;i<kds.length;i++){
 		var times=Math.floor(Math.random()*8)+3;
