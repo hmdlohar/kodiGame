@@ -20,17 +20,17 @@
 				transition: all 0.1s;
 			}
 			.kodi-margin{
-				height:120px;
+				height:83px;
 			}
 			.kodi-container{
 				-height:100px;
-				width:100px;
+				width:80px;
 				border:1px solid gold;
 				margin: auto;
 				text-align: center;
 			}
 			.kodi-container img{
-				height:50px;
+				height:40px;
 				
 			}
 			input[type=checkbox]{
@@ -43,7 +43,10 @@
 		<script src="jquery.min.js"></script>
 		<script src="snap.svg-min.js"></script>
 		<script src="kodiGame.js"></script>
-		<meta name="viewport" content="width=device-width user-scalable=0"> 
+		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
 	</head>
 	<body>
 			<div class="container top-container">
@@ -97,7 +100,8 @@
 			<audio src="sounds/kodiThrow.mp3" id="kodiThrowSound"></audio>
 	</body>
 </html>
-
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript">
 var mainSvg=$("#mainSvg");
 var numNow=$("#numNow");
