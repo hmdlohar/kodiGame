@@ -5,14 +5,15 @@ APPDIR=$(pwd)
 #Build APK
 if [ $CH == "1" ]
 then
-    cordova build android --release
+    cd android
+	./gradlew assembleRelease
 fi
 
 # Sign APK
 if [ $CH == "1" -o  $CH == "2" ]
 then
 	#jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore keystore/eyewynk.keystore platforms/android/app/build/outputs/apk/debug/app-debug.apk eyewynk_alias
-	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$APPDIR/keystore/key180830.jks" "$APPDIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk" key180830
+	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$APPDIR/keystore/thehypertech.keystore" "$APPDIR/android/app/build/outputs/apk/release/app-release-unsigned.apk" thehypertech
 fi
 
 if [ $CH == "1" -o  $CH == "2" -o  $CH == "3" ]

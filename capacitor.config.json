@@ -1,0 +1,8 @@
+{
+  "appId": "tech.thehyper.kodigame",
+  "appName": "Kodi Game",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
